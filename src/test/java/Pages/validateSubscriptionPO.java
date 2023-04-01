@@ -18,9 +18,11 @@ public validateSubscriptionPO()
     String pk = "@Var";
     String curr = "//div[@id='@Var1']/child::i";
     String pr = "//div[@id='@Var2']/child::b";
-//    WebElement priceLite = driver.findElement(By.xpath("//div[@id='currency-lite']/child::b"));
-//    WebElement priceClassic = driver.findElement(By.xpath("//div[@id='currency-classic']/child::b"));
-//    WebElement pricePrem = driver.findElement(By.xpath("//div[@id='currency-premium']/child::b"));
+    String videoQ ="//div[contains(text(),'Video Qual')]/following::div[@Var]";
+    String deviceAccess="//div[contains(text(),'Device Access')]/following::div[@Var]";
+    String rewindCont="//div[contains(text(),'Rewind Con')]/following::div[@Var]";
+
+
 
 
 }

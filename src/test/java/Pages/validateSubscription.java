@@ -1,7 +1,13 @@
 package Pages;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.Test;
+
 import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,6 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class validateSubscription extends validateSubscriptionPO{
 
 
+    @Test(priority = 0)
+    @Step("Select Specific Country")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Select country button and pick country")
     public void selectCountry(String country){
 
         //click on the countries button
@@ -34,6 +44,7 @@ public class validateSubscription extends validateSubscriptionPO{
 
     }
 
+@Test(priority = 1)
     public void choosePackage(String pkg){
 
         //wait for element to be visiable
@@ -42,6 +53,11 @@ public class validateSubscription extends validateSubscriptionPO{
         pk = pk.replace("@Var", pkg);
     }
 
+
+    @Test(priority = 2)
+    @Step("Scroll down to packages and verify currency for selected country")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Verify that currency matches expected result")
     public void validateCurrency(String currency, String coin){
 
 
@@ -58,6 +74,10 @@ public class validateSubscription extends validateSubscriptionPO{
         System.out.println("Test Passed");
     }
 
+    @Test(priority = 3)
+    @Step("Validate the price for each package per country")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Verify the price for each package per selected country")
     public void validatePrice(String price, String amount){
 
         //replace the Var in price xpath upon user selection on package + country
@@ -70,6 +90,44 @@ public class validateSubscription extends validateSubscriptionPO{
         assertEquals(amount, actual);
         System.out.println("Amount per month for package "+price+" is "+amount+".");
         System.out.println("Test Passed");
+
+    }
+
+    @Test(priority = 4)
+    @Step("Validate packages content")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Validate packages content")
+    public void validatePackageContent(String pkg, String video, String videoExp, String device, String devExp, String rewind, String rewExp){
+
+        //determine which package passed from feature file
+        choosePackage(pkg);
+        //get the video quality xpath as per selected package
+        videoQ = videoQ.replace("@Var",video);
+        WebElement Evideo = driver.findElement(By.xpath(videoQ));
+
+        //get the device access xpath quality as per selected package
+        deviceAccess = deviceAccess.replace("@Var", device);
+        WebElement Edevice = driver.findElement(By.xpath(deviceAccess));
+
+        //get the rewind content xpath as per selected package
+        rewindCont = rewindCont.replace("@Var", rewind);
+        WebElement Erewind = driver.findElement(By.xpath(rewindCont));
+
+///////////////Trace Expected vs Actual////////////////////////////
+
+//        if (videoExp == Evideo.getText()){
+//            System.out.println("Test Passed");
+//        }
+//        else{
+//            System.out.println("expected "+videoExp+" but got"+Evideo.getAttribute("innerText"));
+//        }
+////////////////////////////////////////////////////////////////////
+
+        //ASSERTIONS
+        assertEquals(videoExp, Evideo.getAttribute("innerText"),"VideoQuality for "+pkg+" matched successfully");
+        assertEquals(devExp, Edevice.getAttribute("innerText"),"Device access for "+pkg+" matched successfully");
+        assertEquals(rewExp, Erewind.getAttribute("innerText"),"Rewind Content for "+pkg+" matched successfully");
+
 
     }
 
